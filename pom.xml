@@ -91,11 +91,23 @@
     <url>https://travis-ci.org/mybatis/spring</url>
   </ciManagement>
   <distributionManagement>
+    <!--
     <site>
       <id>gh-pages</id>
       <name>Mybatis GitHub Pages</name>
       <url>git:ssh://git@github.com/mybatis/spring.git?gh-pages#</url>
     </site>
+    -->
+    <snapshotRepository>
+      <id>internal.repo.snapshots</id>
+      <name>Temporary Staging Repository(Snapshots)</name>
+      <url>file://${user.dir}/target/mvn-repo/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>internal.repo.releases</id>
+      <name>Temporary Staging Repository(Releases)</name>
+      <url>file://${user.dir}/target/mvn-repo/releases</url>
+    </repository>
   </distributionManagement>
 
   <properties>
@@ -303,6 +315,7 @@
   </dependencies>
 
   <repositories>
+    <!--
     <repository>
       <id>sonatype-oss-snapshots</id>
       <name>Sonatype OSS Snapshots Repository</name>
@@ -311,6 +324,7 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    -->
     <repository>
       <id>spring-milestones</id>
       <name>Spring Milestones</name>
@@ -319,9 +333,27 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <repository>
+        <id>robb-mvn-repo</id>
+        <url>https://rawgit.com/hxh-robb/mvn-repo/master/snapshots</url>
+    </repository>
   </repositories>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <configuration>
+            <!-- <altDeploymentRepository>internal.repo::default::file://${user.dir}/target/mvn-repo/releases</altDeploymentRepository> -->
+            <altDeploymentRepository>internal.repo.snapshots::default::file://${user.dir}/target/mvn-repo/snapshots</altDeploymentRepository>
+          </configuration>
+          <version>3.0.0-M1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
